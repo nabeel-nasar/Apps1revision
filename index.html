@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C Programming Curriculum & Lab Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            navy: {
+              800: '#1e3a8a',
+              900: '#1e40af',
+              950: '#172554',
+            },
+            skyblue: {
+              400: '#38bdf8',
+              500: '#3b82f6',
+              600: '#2563eb',
+            },
+            warmorange: {
+              100: '#ffedd5',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: #0f172a;
+    }
+    .code-block {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3b82f6;
+    }
+    .card-white {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+    .card-highlight {
+      border: 1px solid #ffedd5;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 247, 237, 0.95) 100%);
+      backdrop-filter: blur(8px);
+    }
+    .tab-btn {
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background-color: #1e3a8a;
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .tab-btn:not(.active) {
+      color: #475569;
+    }
+    .tab-btn:not(.active):hover {
+      background-color: #ffffff;
+      color: #1e3a8a;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-sky-500 selection:text-white">
+
+  <!-- Header / Navigation -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md bg-gradient-to-tr from-navy-900 to-sky-500 flex items-center justify-center text-white font-bold text-lg font-mono">
+            &lt;C&gt;
+          </div>
+          <div>
+            <h1 class="text-base font-bold text-slate-900 leading-none tracking-tight">C Programming Course & Lab Portal</h1>
+            <p class="text-xs text-navy-800 font-medium mt-0.5">Beginner Curriculum • Step-by-Step Examples • Interactive Visualizers</p>
+          </div>
+        </div>
+
+        <!-- Desktop Quick Info -->
+        <div class="hidden md:flex items-center space-x-2 text-xs">
+          <span class="px-2.5 py-1 bg-amber-50 text-amber-800 rounded-lg border border-amber-200 font-semibold">
+            <i class="fa-solid fa-triangle-exclamation text-warmorange-500 mr-1"></i> No Pointers / Complex Syntax
+          </span>
+        </div>
+      </div>
+
+      <!-- Top Navigation Tabs -->
+      <nav class="mt-3 pt-2 border-t border-slate-100 flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs font-semibold">
+        <button onclick="switchTab('lab1')" id="tab-btn-lab1" class="tab-btn active px-3 py-2 rounded-lg flex items-center gap-1.5">
+          <span class="w-4 h-4 rounded-full bg-sky-400 text-navy-950 flex items-center justify-center text-[10px] font-bold">1</span>
+          <span>Lab 1: Intro</span>
+          <span class="text-[10px] opacity-75">(W#1)</span>
+        </button>
+        <button onclick="switchTab('lab2')" id="tab-btn-lab2" class="tab-btn px-3 py-2 rounded-lg flex items-center gap-1.5">
+          <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">2</span>
+          <span>Lab 2: Data Types & IF</span>
+          <span class="text-[9px] bg-warmorange-100 text-warmorange-600 px-1 rounded">HW1</span>
+        </button>
+        <button onclick="switchTab('lab3')" id="tab-btn-lab3" class="tab-btn px-3 py-2 rounded-lg flex items-center gap-1.5">
+          <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">3</span>
+          <span>Lab 3: Switch</span>
+          <span class="text-[9px] bg-warmorange-100 text-warmorange-600 px-1 rounded">HW2</span>
+        </button>
+        <button onclick="switchTab('lab4')" id="tab-btn-lab4" class="tab-btn px-3 py-2 rounded-lg flex items-center gap-1.5">
+          <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">4</span>
+          <span>Lab 4: Loops I</span>
+          <span class="text-[10px] opacity-75">(W#5)</span>
+        </button>
+        <button onclick="switchTab('lab5')" id="tab-btn-lab5" class="tab-btn px-3 py-2 rounded-lg flex items-center gap-1.5">
+          <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">5</span>
+          <span>Lab 5: Loops II</span>
+          <span class="text-[10px] opacity-75">(W#6)</span>
+        </button>
+        <button onclick="switchTab('lab6')" id="tab-btn-lab6" class="tab-btn px-3 py-2 rounded-lg flex items-center gap-1.5">
+          <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">6</span>
+          <span>Lab 6: Functions</span>
+          <span class="text-[10px] opacity-75">(W#7)</span>
+        </button>
+        <button onclick="switchTab('lab7')" id="tab-btn-lab7" class="tab-btn px-3 py-2 rounded-lg flex items-center gap-1.5">
+          <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">7</span>
+          <span>Lab 7: Arrays I</span>
+          <span class="text-[10px] opacity-75">(W#9)</span>
+        </button>
+        <button onclick="switchTab('lab8')" id="tab-btn-lab8" class="tab-btn px-3 py-2 rounded-lg flex items-center gap-1.5">
+          <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">8</span>
+          <span>Lab 8: Bubble Sort</span>
+        </button>
+        <button onclick="switchTab('bot')" id="tab-btn-bot" class="tab-btn px-3 py-2 rounded-lg text-warmorange-600 font-bold flex items-center gap-1">
+          <i class="fa-solid fa-bug"></i>
+          <span>Diagnostic Helper</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- LAB 1: INTRODUCTION TO C PROGRAMMING -->
+    <div id="view-lab1" class="space-y-6">
+      <div class="card-highlight rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-sm">1</div>
+            <h2 class="text-xl font-bold text-slate-900">Lab 1: Introduction to C Programming & Basics</h2>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-navy-900 border border-blue-200"><i class="fa-regular fa-calendar mr-1"></i>Week #1</span>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Learn the essential foundation of C programming through step-by-step progressive building blocks—from program structure to outputting numbers and receiving user input with <code>printf</code> and <code>scanf</code>.
+        </p>
+      </div>
+
+      <!-- Step-by-Step Progression Accordion/Cards -->
+      <div class="space-y-5">
+
+        <!-- Step 1 -->
+        <div class="card-white rounded-xl p-5 border-l-4 border-navy-800">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2">
+              <span class="bg-navy-900 text-white text-xs px-2 py-0.5 rounded">Step 1</span> Minimum C Program Structure
+            </h3>
+            <button onclick="copyCode('code-step1')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">
+              <i class="fa-regular fa-copy mr-1"></i>Copy
+            </button>
+          </div>
+          <p class="text-xs text-slate-600 mb-3">
+            Every C program requires standard input/output library headers (<code>#include &lt;stdio.h&gt;</code>) and an entry point <code>int main()</code>.
+          </p>
+          <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+            <pre id="code-step1"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    // Every statement ends with a semicolon
+    return 0; // Signals program finished successfully
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="card-white rounded-xl p-5 border-l-4 border-sky-500">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2">
+              <span class="bg-sky-500 text-white text-xs px-2 py-0.5 rounded">Step 2</span> Basic Text Printing & Newlines (\n)
+            </h3>
+            <button onclick="copyCode('code-step2')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">
+              <i class="fa-regular fa-copy mr-1"></i>Copy
+            </button>
+          </div>
+          <p class="text-xs text-slate-600 mb-3">
+            Use <code>printf("...");</code> to output text. Use <code>\n</code> to jump to a new line.
+          </p>
+          <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+            <pre id="code-step2"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    printf("Hello, World!\n");
+    printf("Welcome to C Programming Lab.\n");
+    printf("Line 1\nLine 2\nLine 3\n");
+    return 0;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="card-white rounded-xl p-5 border-l-4 border-warmorange-500">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2">
+              <span class="bg-warmorange-500 text-white text-xs px-2 py-0.5 rounded">Step 3</span> Printing Integers & Floats (%d, %f)
+            </h3>
+            <button onclick="copyCode('code-step3')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">
+              <i class="fa-regular fa-copy mr-1"></i>Copy
+            </button>
+          </div>
+          <p class="text-xs text-slate-600 mb-3">
+            Use format specifiers inside quotes: <code>%d</code> for integers (whole numbers) and <code>%f</code> or <code>%.2f</code> for floating point decimals.
+          </p>
+          <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+            <pre id="code-step3"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int age = 19;
+    float score = 95.5;
+
+    printf("Age: %d years old\n", age);
+    printf("Exam Score: %f\n", score);
+    printf("Formatted Score (2 decimals): %.2f\n", score);
+    return 0;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="card-white rounded-xl p-5 border-l-4 border-emerald-500">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2">
+              <span class="bg-emerald-500 text-white text-xs px-2 py-0.5 rounded">Step 4</span> Reading Single Input with scanf()
+            </h3>
+            <button onclick="copyCode('code-step4')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">
+              <i class="fa-regular fa-copy mr-1"></i>Copy
+            </button>
+          </div>
+          <p class="text-xs text-slate-600 mb-3">
+            Use <code>scanf("%d", &variable);</code> to read keyboard input into a variable. Always place <code>&</code> before the variable name!
+          </p>
+          <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+            <pre id="code-step4"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int userNumber;
+
+    printf("Enter your favorite integer number: ");
+    scanf("%d", &userNumber);
+
+    printf("You entered the number: %d\n", userNumber);
+    return 0;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="card-white rounded-xl p-5 border-l-4 border-purple-500">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2">
+              <span class="bg-purple-500 text-white text-xs px-2 py-0.5 rounded">Step 5</span> Reading Two Numbers & Calculating Sum
+            </h3>
+            <button onclick="copyCode('code-step5')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">
+              <i class="fa-regular fa-copy mr-1"></i>Copy
+            </button>
+          </div>
+          <p class="text-xs text-slate-600 mb-3">
+            Prompt for two numbers sequentially, calculate their total sum, and print the resulting answer.
+          </p>
+          <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+            <pre id="code-step5"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int num1, num2, sum;
+
+    printf("Enter first number: ");
+    scanf("%d", &num1);
+
+    printf("Enter second number: ");
+    scanf("%d", &num2);
+
+    sum = num1 + num2;
+
+    printf("The total sum of %d + %d = %d\n", num1, num2, sum);
+    return 0;
+}</code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Interactive Step Simulator for Lab 1 -->
+      <div class="card-white rounded-2xl p-6 border-2 border-sky-200 shadow-md">
+        <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-terminal text-sky-500"></i> Interactive Lab 1 Code Execution Simulator
+        </h3>
+        <p class="text-xs text-slate-600 mb-4">Test Step 5 directly! Input two numbers below to see the simulated terminal output.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+            <div>
+              <label class="text-[11px] font-bold text-slate-700 block mb-1">Enter Number 1 (num1):</label>
+              <input type="number" id="lab1-sim-n1" value="15" class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:border-navy-900">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-700 block mb-1">Enter Number 2 (num2):</label>
+              <input type="number" id="lab1-sim-n2" value="27" class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:border-navy-900">
+            </div>
+            <button onclick="runLab1Sim()" class="w-full bg-navy-800 hover:bg-navy-900 text-white text-xs py-2 rounded-lg font-semibold transition">
+              <i class="fa-solid fa-play mr-1"></i> Run Simulated Program
+            </button>
+          </div>
+          <div class="bg-slate-900 text-green-400 font-mono text-xs p-4 rounded-xl border border-slate-800 h-40 overflow-y-auto" id="lab1-sim-output">
+            &gt; Program Started.<br>
+            Enter first number: 15<br>
+            Enter second number: 27<br>
+            The total sum of 15 + 27 = 42<br>
+            &gt; Process returned 0 (0x0).
+          </div>
+        </div>
+      </div>
+
+      <!-- Lab 1 Common Errors -->
+      <div class="card-white rounded-2xl p-6 border-l-4 border-red-500">
+        <h3 class="font-bold text-red-600 flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-triangle-exclamation"></i> Lab 1 Common Errors & Syntax Mistakes
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 font-semibold block">1. Missing Semicolon ';'</strong>
+            <p class="text-slate-600 mt-1">Forgetting a semicolon at statement ends breaks code compilation.</p>
+          </div>
+          <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 font-semibold block">2. Missing '&' inside scanf()</strong>
+            <p class="text-slate-600 mt-1">Writing <code>scanf("%d", x)</code> leads to immediate program crash (Segmentation Fault).</p>
+          </div>
+          <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 font-semibold block">3. Capitalization Errors</strong>
+            <p class="text-slate-600 mt-1">Writing <code>Printf()</code> or <code>Int Main()</code> causes errors. C is strictly lowercase for keywords!</p>
+          </div>
+          <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 font-semibold block">4. Missing Header or Return</strong>
+            <p class="text-slate-600 mt-1">Forgetting <code>#include &lt;stdio.h&gt;</code> prevents C from finding <code>printf</code> or <code>scanf</code>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAB 2: DATA TYPES, OPERATORS AND IF STATEMENTS -->
+    <div id="view-lab2" class="hidden space-y-6">
+      <div class="card-highlight rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-sm">2</div>
+            <h2 class="text-xl font-bold text-slate-900">Lab 2: Data Types, Operators, and IF Statements</h2>
+          </div>
+          <div class="space-x-2">
+            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-navy-900 border border-blue-200"><i class="fa-regular fa-calendar mr-1"></i>Week #2</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full bg-warmorange-100 text-warmorange-600 border border-warmorange-300">Homework 1</span>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Learn primary data types (<code>int</code>, <code>float</code>, <code>double</code>, <code>char</code>), arithmetic operations, integer division vs floating division, and simple conditional decision making with <code>if</code>.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Code Sample 1 -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-slate-900 text-sm">Example 1: Arithmetic & Division Trap</h3>
+              <button onclick="copyCode('code-lab2-1')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">Copy</button>
+            </div>
+            <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+              <pre id="code-lab2-1"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 5, b = 2;
+    int intResult;
+    float floatResult;
+
+    intResult = a / b;       // Integer division -> 2
+    floatResult = 5.0 / 2.0; // Float division -> 2.50
+
+    printf("Integer Division 5 / 2 = %d\n", intResult);
+    printf("Float Division 5.0 / 2.0 = %.2f\n", floatResult);
+    return 0;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Code Sample 2 -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-slate-900 text-sm">Example 2: Simple IF Condition</h3>
+              <button onclick="copyCode('code-lab2-2')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">Copy</button>
+            </div>
+            <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+              <pre id="code-lab2-2"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int age;
+
+    printf("Enter your age: ");
+    scanf("%d", &age);
+
+    if (age >= 18) {
+        printf("You are eligible to vote!\n");
+    }
+
+    if (age < 18) {
+        printf("You are too young to vote.\n");
+    }
+
+    return 0;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Errors -->
+      <div class="card-white rounded-2xl p-6 border-l-4 border-red-500">
+        <h3 class="font-bold text-red-600 flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-triangle-exclamation"></i> Lab 2 Common Errors & Bugs
+        </h3>
+        <ul class="space-y-3 text-xs text-slate-700">
+          <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 block font-semibold">1. Confusing '=' with '==' inside IF</strong>
+            <p class="text-slate-600 mt-0.5"><code>if (x = 5)</code> overwrites <code>x</code> with 5 and always evaluates to true! Use <code>if (x == 5)</code> for equality comparison.</p>
+          </li>
+          <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 block font-semibold">2. Integer Division Truncation</strong>
+            <p class="text-slate-600 mt-0.5">Dividing integers discards decimal digits. <code>5 / 2</code> evaluates to <code>2</code>. Use floats (e.g. <code>5.0 / 2</code>) to keep decimals.</p>
+          </li>
+          <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 block font-semibold">3. Accidental Semicolon After IF Header</strong>
+            <p class="text-slate-600 mt-0.5">Writing <code>if (x &gt; 5); { ... }</code> runs the block unconditionally because the semicolon terminates the <code>if</code> immediately!</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- LAB 3: DECISION MAKING IN C -->
+    <div id="view-lab3" class="hidden space-y-6">
+      <div class="card-highlight rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-sm">3</div>
+            <h2 class="text-xl font-bold text-slate-900">Lab 3: Decision Making in C (if, if-else, Nested-if, Switch)</h2>
+          </div>
+          <div class="space-x-2">
+            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-navy-900 border border-blue-200"><i class="fa-regular fa-calendar mr-1"></i>Week #3</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full bg-warmorange-100 text-warmorange-600 border border-warmorange-300">Homework 2</span>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Branch program flow using binary choices (<code>if-else</code>), multi-tier conditions (<code>else if</code>), and discrete menu selection (<code>switch-case</code>).
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- If-Else Example -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-slate-900 text-sm">Grade Classification (if-else if-else)</h3>
+              <button onclick="copyCode('code-lab3-1')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">Copy</button>
+            </div>
+            <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+              <pre id="code-lab3-1"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int mark;
+    printf("Enter exam score (0-100): ");
+    scanf("%d", &mark);
+
+    if (mark >= 90) {
+        printf("Grade: A\n");
+    } else if (mark >= 80) {
+        printf("Grade: B\n");
+    } else if (mark >= 70) {
+        printf("Grade: C\n");
+    } else if (mark >= 60) {
+        printf("Grade: D\n");
+    } else {
+        printf("Grade: F\n");
+    }
+    return 0;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Switch Example -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-slate-900 text-sm">Menu Choice (switch-case)</h3>
+              <button onclick="copyCode('code-lab3-2')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">Copy</button>
+            </div>
+            <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+              <pre id="code-lab3-2"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int choice;
+    printf("1. Deposit\n2. Withdraw\n3. Exit\n");
+    printf("Select option (1-3): ");
+    scanf("%d", &choice);
+
+    switch(choice) {
+        case 1:
+            printf("Deposit selected.\n");
+            break;
+        case 2:
+            printf("Withdraw selected.\n");
+            break;
+        case 3:
+            printf("Exiting program.\n");
+            break;
+        default:
+            printf("Invalid selection!\n");
+    }
+    return 0;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Errors -->
+      <div class="card-white rounded-2xl p-6 border-l-4 border-red-500">
+        <h3 class="font-bold text-red-600 flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-triangle-exclamation"></i> Lab 3 Common Errors & Bugs
+        </h3>
+        <ul class="space-y-3 text-xs text-slate-700">
+          <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 block font-semibold">1. Forgetting 'break;' in Switch Cases</strong>
+            <p class="text-slate-600 mt-0.5">Omitting <code>break;</code> causes execution to "fall through" into every case below it unconditionally!</p>
+          </li>
+          <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 block font-semibold">2. Comparing Characters Without Quotes</strong>
+            <p class="text-slate-600 mt-0.5">Character literals require single quotes, like <code>'A'</code> or <code>'b'</code>. Writing <code>case A:</code> treats A as an unassigned variable.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- LAB 4: LOOPS I -->
+    <div id="view-lab4" class="hidden space-y-6">
+      <div class="card-highlight rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-sm">4</div>
+            <h2 class="text-xl font-bold text-slate-900">Lab 4: Loops I (for loop, while loop, input validation)</h2>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-navy-900 border border-blue-200"><i class="fa-regular fa-calendar mr-1"></i>Week #5</span>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Master repetition with <code>for</code> loops for fixed iteration counts and <code>while</code> loops for input validation that reprompts until valid input is given.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- For Loop & While Loop Examples -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-slate-900 text-sm">Counting 1 to 10 (for & while)</h3>
+              <button onclick="copyCode('code-lab4-1')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">Copy</button>
+            </div>
+            <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+              <pre id="code-lab4-1"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    // 1. Standard FOR Loop
+    printf("For Loop:\n");
+    for (int i = 1; i <= 10; i++) {
+        printf("%d ", i);
+    }
+    printf("\n\n");
+
+    // 2. Equivalent WHILE Loop
+    printf("While Loop:\n");
+    int count = 1;
+    while (count <= 10) {
+        printf("%d ", count);
+        count++; // Increment count
+    }
+    printf("\n");
+    return 0;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Validation Simulator -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm mb-2">Interactive While-Loop Input Validation</h3>
+            <p class="text-xs text-slate-600 mb-3">Simulate a C <code>while</code> loop that repeatedly asks for a positive number (> 0).</p>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2 mb-3">
+              <div class="flex gap-2">
+                <input type="number" id="sim-loop-input" placeholder="Enter number..." class="flex-grow text-xs px-3 py-1.5 border rounded-lg focus:outline-none focus:border-navy-900">
+                <button onclick="runLoopValSim()" class="bg-navy-800 hover:bg-navy-900 text-white text-xs px-3 py-1.5 rounded-lg font-semibold transition">Submit</button>
+              </div>
+              <div id="sim-loop-out" class="bg-slate-900 text-green-400 font-mono text-xs p-3 rounded-lg h-24 overflow-y-auto border border-slate-800">
+                &gt; Program started. Enter positive number (&gt; 0)...
+              </div>
+            </div>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+            <pre id="code-lab4-2"><code>int number;
+printf("Enter positive number: ");
+scanf("%d", &number);
+
+// Repeat while input is invalid
+while (number <= 0) {
+    printf("Invalid! Must be > 0. Try again: ");
+    scanf("%d", &number);
+}
+printf("Accepted: %d\n", number);</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Errors -->
+      <div class="card-white rounded-2xl p-6 border-l-4 border-red-500">
+        <h3 class="font-bold text-red-600 flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-triangle-exclamation"></i> Lab 4 Common Errors & Bugs
+        </h3>
+        <ul class="space-y-3 text-xs text-slate-700">
+          <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 block font-semibold">1. Infinite Loops (Missing Increment)</strong>
+            <p class="text-slate-600 mt-0.5">Forgetting <code>count++</code> inside a <code>while(count &lt;= 10)</code> loop causes the loop to run forever.</p>
+          </li>
+          <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+            <strong class="text-red-900 block font-semibold">2. Semicolon After Loop Header</strong>
+            <p class="text-slate-600 mt-0.5">Writing <code>while (x &lt; 10);</code> places an empty statement in the loop body, freezing execution right on that line.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- LAB 5: LOOPS II -->
+    <div id="view-lab5" class="hidden space-y-6">
+      <div class="card-highlight rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-sm">5</div>
+            <h2 class="text-xl font-bold text-slate-900">Lab 5: Loops II (Nested Loops & Patterns)</h2>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-navy-900 border border-blue-200"><i class="fa-regular fa-calendar mr-1"></i>Week #6</span>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Nest loops inside loops to work with multi-dimensional structures: printing multiplication tables and star shape patterns.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Interactive Pattern Generator -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-bold text-slate-900 text-sm">Interactive Pattern & Table Visualizer</h3>
+              <div class="flex gap-1 text-[11px]">
+                <button onclick="renderPattern('table')" class="bg-navy-800 text-white px-2 py-1 rounded">Table</button>
+                <button onclick="renderPattern('triangle')" class="bg-slate-200 text-slate-800 px-2 py-1 rounded">Triangle</button>
+                <button onclick="renderPattern('rect')" class="bg-slate-200 text-slate-800 px-2 py-1 rounded">Rectangle</button>
+              </div>
+            </div>
+            <div id="pattern-output" class="bg-slate-900 text-slate-100 font-mono text-xs p-4 rounded-xl h-44 overflow-auto border border-slate-800 leading-tight">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+          <div class="mt-3 bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+            <pre id="code-lab5"><code>// Right Triangle Star Pattern
+for (int i = 1; i <= 5; i++) {
+    for (int j = 1; j <= i; j++) {
+        printf("* ");
+    }
+    printf("\n"); // Newline after row completes
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Common Errors -->
+        <div class="card-white rounded-2xl p-6 border-l-4 border-red-500">
+          <h3 class="font-bold text-red-600 flex items-center gap-2 mb-3">
+            <i class="fa-solid fa-triangle-exclamation"></i> Lab 5 Common Errors & Bugs
+          </h3>
+          <ul class="space-y-3 text-xs text-slate-700">
+            <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+              <strong class="text-red-900 block font-semibold">1. Reusing Same Counter Variable 'i'</strong>
+              <p class="text-slate-600 mt-0.5">Using <code>for(int i=0...)</code> inside an outer loop that also uses <code>i</code> corrupts loop counters completely.</p>
+            </li>
+            <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+              <strong class="text-red-900 block font-semibold">2. Forgetting Row Newlines</strong>
+              <p class="text-slate-600 mt-0.5">Forgetting <code>printf("\n");</code> at the end of the inner loop prints all table or pattern items on one long single line.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAB 6: FUNCTIONS -->
+    <div id="view-lab6" class="hidden space-y-6">
+      <div class="card-highlight rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-sm">6</div>
+            <h2 class="text-xl font-bold text-slate-900">Lab 6: Functions (Normal Functions & Void Functions)</h2>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-navy-900 border border-blue-200"><i class="fa-regular fa-calendar mr-1"></i>Week #7</span>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Divide programs into reusable, modular blocks using function prototypes, returning functions (<code>int</code>, <code>float</code>), and non-returning <code>void</code> functions.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Function Example -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-slate-900 text-sm">Function Prototypes & Calls</h3>
+              <button onclick="copyCode('code-lab6')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">Copy</button>
+            </div>
+            <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+              <pre id="code-lab6"><code>#include &lt;stdio.h&gt;
+
+// 1. Function Prototypes (Declarations)
+void printHeader();
+int calculateArea(int length, int width);
+
+int main() {
+    printHeader(); // Call void function
+
+    int l = 5, w = 4;
+    int area = calculateArea(l, w); // Call returning function
+
+    printf("Area of %d x %d rectangle = %d\n", l, w, area);
+    return 0;
+}
+
+// 2. Void Function Definition
+void printHeader() {
+    printf("=== RECTANGLE AREA CALCULATOR ===\n");
+}
+
+// 3. Returning Function Definition
+int calculateArea(int length, int width) {
+    return length * width;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Common Errors -->
+        <div class="card-white rounded-2xl p-6 border-l-4 border-red-500">
+          <h3 class="font-bold text-red-600 flex items-center gap-2 mb-3">
+            <i class="fa-solid fa-triangle-exclamation"></i> Lab 6 Common Errors & Bugs
+          </h3>
+          <ul class="space-y-3 text-xs text-slate-700">
+            <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+              <strong class="text-red-900 block font-semibold">1. Missing Function Prototypes</strong>
+              <p class="text-slate-600 mt-0.5">Calling a function inside <code>main()</code> before declaring it triggers "implicit declaration" compiler warnings.</p>
+            </li>
+            <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+              <strong class="text-red-900 block font-semibold">2. Scope Misconception</strong>
+              <p class="text-slate-600 mt-0.5">Variables defined inside <code>main()</code> are invisible inside other functions unless explicitly passed as parameters!</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAB 7: ARRAYS I -->
+    <div id="view-lab7" class="hidden space-y-6">
+      <div class="card-highlight rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-sm">7</div>
+            <h2 class="text-xl font-bold text-slate-900">Lab 7: Arrays I (1D & 2D Arrays with Loops)</h2>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-navy-900 border border-blue-200"><i class="fa-regular fa-calendar mr-1"></i>Week #9</span>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Store sequence collections using 1D arrays and 2D grid matrices. Use <code>for</code> loops to read values with <code>scanf</code> and print array contents.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 1D & 2D Array Examples -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-slate-900 text-sm">1D & 2D Array Reading & Printing</h3>
+              <button onclick="copyCode('code-lab7')" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded border border-slate-300">Copy</button>
+            </div>
+            <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+              <pre id="code-lab7"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    // 1D Array Example
+    int numbers[5];
+    printf("Enter 5 numbers:\n");
+    for (int i = 0; i < 5; i++) {
+        scanf("%d", &numbers[i]); // Note & before numbers[i]
+    }
+
+    printf("You entered: ");
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", numbers[i]);
+    }
+    printf("\n\n");
+
+    // 2D Matrix Array Example (2 rows, 3 columns)
+    int matrix[2][3] = { {1, 2, 3}, {4, 5, 6} };
+    printf("2D Matrix:\n");
+    for (int row = 0; row < 2; row++) {
+        for (int col = 0; col < 3; col++) {
+            printf("%d ", matrix[row][col]);
+        }
+        printf("\n");
+    }
+    return 0;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Common Errors -->
+        <div class="card-white rounded-2xl p-6 border-l-4 border-red-500">
+          <h3 class="font-bold text-red-600 flex items-center gap-2 mb-3">
+            <i class="fa-solid fa-triangle-exclamation"></i> Lab 7 Common Errors & Bugs
+          </h3>
+          <ul class="space-y-3 text-xs text-slate-700">
+            <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+              <strong class="text-red-900 block font-semibold">1. Array Index Out of Bounds</strong>
+              <p class="text-slate-600 mt-0.5">An array of size 5 (<code>arr[5]</code>) has valid indices <strong>0 to 4</strong>. Accessing <code>arr[5]</code> accesses illegal memory!</p>
+            </li>
+            <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+              <strong class="text-red-900 block font-semibold">2. Forgetting '&' in scanf with Array Element</strong>
+              <p class="text-slate-600 mt-0.5">Always write <code>scanf("%d", &arr[i]);</code>. Omitting <code>&</code> causes instant crashes.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAB 8: BUBBLE SORT -->
+    <div id="view-lab8" class="hidden space-y-6">
+      <div class="card-highlight rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-sm">8</div>
+            <h2 class="text-xl font-bold text-slate-900">Lab 8: Bubble Sort Algorithm</h2>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 text-navy-900 border border-blue-200"><i class="fa-regular fa-calendar mr-1"></i>Algorithm Sorting</span>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          Bubble Sort steps through a 1D array, compares adjacent elements, and swaps them using a <code>temp</code> variable if they are out of order.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Visualizer -->
+        <div class="card-white rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-bold text-slate-900 text-sm">Interactive Bubble Sort Visualizer</h3>
+              <button onclick="runBubbleSortAnim()" class="bg-warmorange-500 hover:bg-warmorange-600 text-white text-xs px-3 py-1.5 rounded-lg font-semibold transition flex items-center gap-1">
+                <i class="fa-solid fa-play"></i> Run Visualizer
+              </button>
+            </div>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 mb-3">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs text-slate-600 font-semibold">Array Bars:</span>
+                <span id="bs-status" class="text-xs font-mono text-warmorange-600 font-bold">Ready</span>
+              </div>
+              <div class="flex justify-around items-end h-28 bg-slate-900 p-3 rounded-xl border border-slate-800 text-white font-mono text-xs">
+                <div id="bar-0" class="w-8 bg-sky-500 rounded-t flex items-center justify-center font-bold" style="height: 60%;">34</div>
+                <div id="bar-1" class="w-8 bg-sky-500 rounded-t flex items-center justify-center font-bold" style="height: 25%;">12</div>
+                <div id="bar-2" class="w-8 bg-sky-500 rounded-t flex items-center justify-center font-bold" style="height: 90%;">88</div>
+                <div id="bar-3" class="w-8 bg-sky-500 rounded-t flex items-center justify-center font-bold" style="height: 40%;">25</div>
+                <div id="bar-4" class="w-8 bg-sky-500 rounded-t flex items-center justify-center font-bold" style="height: 10%;">5</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto">
+            <pre id="code-lab8"><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int arr[5] = {34, 12, 88, 25, 5};
+    int n = 5, temp;
+
+    // Bubble Sort nested loops
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // Swap using temp variable
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+    return 0;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Common Errors -->
+        <div class="card-white rounded-2xl p-6 border-l-4 border-red-500">
+          <h3 class="font-bold text-red-600 flex items-center gap-2 mb-3">
+            <i class="fa-solid fa-triangle-exclamation"></i> Lab 8 Common Errors & Bugs
+          </h3>
+          <ul class="space-y-3 text-xs text-slate-700">
+            <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+              <strong class="text-red-900 block font-semibold">1. Inner Loop Bounds (j + 1 Overflow)</strong>
+              <p class="text-slate-600 mt-0.5">Writing <code>j &lt; n</code> causes <code>arr[j + 1]</code> to access memory out of bounds! Always use <code>j &lt; n - 1 - i</code>.</p>
+            </li>
+            <li class="bg-red-50 p-3 rounded-xl border border-red-100">
+              <strong class="text-red-900 block font-semibold">2. Swapping Without 'temp'</strong>
+              <p class="text-slate-600 mt-0.5">Writing <code>arr[j] = arr[j+1]; arr[j+1] = arr[j];</code> overwrites value 1 before saving it! Always use a temporary variable.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: DIAGNOSTIC ASSISTANT HUB -->
+    <div id="view-bot" class="hidden space-y-6">
+      <div class="card-white rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center space-x-3 mb-4">
+          <div class="w-10 h-10 rounded-xl bg-navy-900 text-white flex items-center justify-center font-bold text-lg">
+            <i class="fa-solid fa-bug text-sky-400"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">C Diagnostic & Error Troubleshooting Assistant</h2>
+            <p class="text-xs text-slate-600">Quick diagnostic answers for common beginner compilation errors</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+          <button onclick="triggerFloatingOption('Segmentation Fault (Core Dumped)')" class="p-4 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-900 text-left font-medium transition shadow-sm flex items-start gap-3">
+            <i class="fa-solid fa-burst text-red-600 text-base mt-0.5"></i>
+            <div>
+              <strong class="block font-bold">Segmentation Fault</strong>
+              <span class="text-[11px] text-red-800">Missing scanf '&', or out-of-bounds array index.</span>
+            </div>
+          </button>
+
+          <button onclick="triggerFloatingOption('Infinite Loop Fixes')" class="p-4 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 text-left font-medium transition shadow-sm flex items-start gap-3">
+            <i class="fa-solid fa-arrows-spin text-amber-600 text-base mt-0.5"></i>
+            <div>
+              <strong class="block font-bold">Infinite Loop / Frozen Loop</strong>
+              <span class="text-[11px] text-amber-800">Fix missing loop increment or accidental semicolons.</span>
+            </div>
+          </button>
+
+          <button onclick="triggerFloatingOption('Implicit Declaration Warning')" class="p-4 rounded-xl border border-sky-200 bg-sky-50 hover:bg-sky-100 text-sky-900 text-left font-medium transition shadow-sm flex items-start gap-3">
+            <i class="fa-solid fa-code text-sky-600 text-base mt-0.5"></i>
+            <div>
+              <strong class="block font-bold">Implicit Function Declaration</strong>
+              <span class="text-[11px] text-sky-800">Resolve missing prototypes or missing #include &lt;stdio.h&gt;.</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FLOATING CHATBOT WIDGET -->
+  <div id="floating-chat-container" class="fixed bottom-5 right-5 z-50">
+    <button id="floating-chat-btn" onclick="toggleFloatingChat()" class="w-14 h-14 bg-navy-900 hover:bg-navy-800 text-white rounded-full flex items-center justify-center shadow-xl border-2 border-white transition-all transform hover:scale-105">
+      <i id="chat-icon-open" class="fa-solid fa-robot text-xl"></i>
+      <i id="chat-icon-close" class="fa-solid fa-xmark text-xl hidden"></i>
+    </button>
+
+    <div id="floating-chat-window" class="hidden absolute bottom-16 right-0 w-[92vw] sm:w-[380px] h-[480px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
+      <div class="p-3 bg-navy-900 text-white flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-bug text-sky-400"></i>
+          <div>
+            <span class="font-bold text-xs block">C Diagnostic Helper</span>
+            <span class="text-[10px] text-sky-200 block">Ask beginner syntax or bug questions</span>
+          </div>
+        </div>
+        <button onclick="toggleFloatingChat()" class="text-slate-300 hover:text-white text-sm p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="widget-chat-messages" class="flex-grow p-3 overflow-y-auto space-y-3 bg-slate-50 text-xs">
+        <div class="bg-white border border-slate-200 rounded-xl p-3 text-slate-700 shadow-sm leading-relaxed">
+          Hello! Type any C compiler error message (e.g., <i>segmentation fault</i>, <i>missing semicolon</i>, <i>infinite loop</i>) to get quick fixes!
+        </div>
+      </div>
+
+      <form onsubmit="handleWidgetChatSubmit(event)" class="p-2 bg-white border-t border-slate-200 flex gap-1.5">
+        <input type="text" id="widget-chat-input" placeholder="Type C error..." class="flex-grow bg-slate-100 text-slate-800 text-xs px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-navy-900">
+        <button type="submit" class="bg-navy-900 hover:bg-navy-800 text-white px-3 py-2 rounded-lg text-xs font-semibold transition">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-4 left-4 bg-navy-900 text-white font-semibold px-4 py-2.5 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50 text-xs border border-sky-400">
+    <i class="fa-solid fa-circle-check text-sky-400"></i>
+    <span id="toast-msg">Copied!</span>
+  </div>
+
+  <script>
+    // Tab switching logic
+    function switchTab(tabId) {
+      const allTabs = ['lab1', 'lab2', 'lab3', 'lab4', 'lab5', 'lab6', 'lab7', 'lab8', 'bot'];
+      allTabs.forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        if (view) view.classList.add('hidden');
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (btn) btn.classList.remove('active');
+      });
+
+      const targetView = document.getElementById(`view-${tabId}`);
+      if (targetView) targetView.classList.remove('hidden');
+
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabId === 'lab5') renderPattern('table');
+    }
+
+    // Clipboard Copy
+    function copyCode(elementId) {
+      const codeText = document.getElementById(elementId).innerText;
+      const textArea = document.createElement('textarea');
+      textArea.value = codeText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      showToast('Code snippet copied!');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // Lab 1 Simulator
+    function runLab1Sim() {
+      const n1 = parseInt(document.getElementById('lab1-sim-n1').value) || 0;
+      const n2 = parseInt(document.getElementById('lab1-sim-n2').value) || 0;
+      const sum = n1 + n2;
+      const out = document.getElementById('lab1-sim-output');
+      out.innerHTML = `&gt; Program Started.<br>Enter first number: ${n1}<br>Enter second number: ${n2}<br>The total sum of ${n1} + ${n2} = ${sum}<br>&gt; Process returned 0 (0x0).`;
+    }
+
+    // Lab 4 Simulator
+    function runLoopValSim() {
+      const input = document.getElementById('sim-loop-input');
+      const out = document.getElementById('sim-loop-out');
+      const val = parseInt(input.value);
+
+      if (isNaN(val) || val <= 0) {
+        out.innerHTML += `<br><span class="text-amber-400">&gt; Input (${input.value}) <= 0. Condition is TRUE! Loop reprompting...</span>`;
+      } else {
+        out.innerHTML += `<br><span class="text-green-300 font-bold">&gt; Input (${val}) > 0. Condition is FALSE! Accepted and loop exited.</span>`;
+      }
+      out.scrollTop = out.scrollHeight;
+      input.value = '';
+    }
+
+    // Lab 5 Patterns
+    function renderPattern(type) {
+      const box = document.getElementById('pattern-output');
+      let text = "";
+      if (type === 'table') {
+        text += "// Multiplication Table (1 to 5)\n";
+        for (let i = 1; i <= 5; i++) {
+          for (let j = 1; j <= 5; j++) {
+            text += (i * j).toString().padStart(3, ' ') + " ";
+          }
+          text += "\n";
+        }
+      } else if (type === 'triangle') {
+        text += "// Star Right Triangle\n";
+        for (let i = 1; i <= 5; i++) {
+          for (let j = 1; j <= i; j++) {
+            text += "* ";
+          }
+          text += "\n";
+        }
+      } else {
+        text += "// Star Rectangle\n";
+        for (let i = 1; i <= 4; i++) {
+          for (let j = 1; j <= 6; j++) {
+            text += "* ";
+          }
+          text += "\n";
+        }
+      }
+      box.innerText = text;
+    }
+
+    // Lab 8 Bubble Sort Anim
+    function runBubbleSortAnim() {
+      let a = [34, 12, 88, 25, 5];
+      const status = document.getElementById('bs-status');
+      status.innerText = "Sorting...";
+
+      let steps = [];
+      for (let i = 0; i < a.length - 1; i++) {
+        for (let j = 0; j < a.length - 1 - i; j++) {
+          if (a[j] > a[j + 1]) {
+            let temp = a[j];
+            a[j] = a[j + 1];
+            a[j + 1] = temp;
+            steps.push({ array: [...a], j1: j, j2: j + 1 });
+          }
+        }
+      }
+
+      let idx = 0;
+      let interval = setInterval(() => {
+        if (idx >= steps.length) {
+          clearInterval(interval);
+          status.innerText = "Sorted!";
+          for (let k = 0; k < 5; k++) {
+            document.getElementById(`bar-${k}`).className = 'w-8 bg-green-500 rounded-t flex items-center justify-center font-bold';
+          }
+          return;
+        }
+        let step = steps[idx];
+        for (let k = 0; k < 5; k++) {
+          const bar = document.getElementById(`bar-${k}`);
+          bar.innerText = step.array[k];
+          bar.style.height = `${step.array[k]}%`;
+          if (k === step.j1 || k === step.j2) {
+            bar.className = 'w-8 bg-warmorange-500 rounded-t flex items-center justify-center font-bold scale-105';
+          } else {
+            bar.className = 'w-8 bg-sky-500 rounded-t flex items-center justify-center font-bold';
+          }
+        }
+        idx++;
+      }, 600);
+    }
+
+    // Floating Chatbot Widget
+    function toggleFloatingChat() {
+      document.getElementById('floating-chat-window').classList.toggle('hidden');
+      document.getElementById('chat-icon-open').classList.toggle('hidden');
+      document.getElementById('chat-icon-close').classList.toggle('hidden');
+    }
+
+    function triggerFloatingOption(q) {
+      const win = document.getElementById('floating-chat-window');
+      if (win.classList.contains('hidden')) toggleFloatingChat();
+      document.getElementById('widget-chat-input').value = q;
+      handleWidgetChatSubmit(new Event('submit'));
+    }
+
+    function handleWidgetChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('widget-chat-input');
+      const q = input.value.trim();
+      if (!q) return;
+
+      const win = document.getElementById('widget-chat-messages');
+      win.innerHTML += `<div class="text-right"><span class="inline-block bg-navy-900 text-white px-3 py-1.5 rounded-xl text-xs">${q}</span></div>`;
+      input.value = '';
+
+      setTimeout(() => {
+        let reply = "Ensure every statement ends with ';', include standard headers, and place '&' before variables in scanf().";
+        const ql = q.toLowerCase();
+        if (ql.includes("seg") || ql.includes("segmentation") || ql.includes("dumped")) {
+          reply = "<strong>Segmentation Fault:</strong> Usually caused by forgetting <code>&</code> inside <code>scanf(\"%d\", &var)</code> or accessing array elements out of bounds.";
+        } else if (ql.includes("infinite") || ql.includes("freeze")) {
+          reply = "<strong>Infinite Loop:</strong> Check if your loop increment (e.g. <code>i++</code>) is missing or if you put a semicolon right after <code>while(...)</code>.";
+        } else if (ql.includes("implicit") || ql.includes("prototype")) {
+          reply = "<strong>Implicit Declaration:</strong> Declare function prototypes at the top of the file before <code>main()</code>.";
+        }
+        win.innerHTML += `<div class="bg-white border border-slate-200 rounded-xl p-3 text-slate-800 text-xs shadow-sm leading-relaxed">${reply}</div>`;
+        win.scrollTop = win.scrollHeight;
+      }, 200);
+    }
+  </script>
+</body>
+</html>
